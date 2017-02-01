@@ -88,3 +88,26 @@ var sum = function() {
 };
 
 document.write(sum(4,8,15,16,23,43)); //108
+
+var add = function (a, b) {
+  if (typeof a !== 'number' || typeof b !== 'number') {
+    throw {
+      name: 'TypeError',
+      message: 'add needs numbers'
+    };
+  }
+  return a + b;
+}
+
+// Make a try_it function that calls the new add
+// function incorrectly
+
+var try_it = function () {
+  try {
+    add("seven");
+  } catch (e) {
+    document.write(e.name + ': ' + e.message);
+  }
+}
+
+try_it();
