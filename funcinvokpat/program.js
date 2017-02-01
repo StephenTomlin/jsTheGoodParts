@@ -53,3 +53,38 @@ Quo.prototype.get_status = function () {
 var myQuo = new Quo("confused");
 
 document.write(myQuo.get_status()); // confused
+
+//make an array of 2 numbers and add them.
+var array = [3, 4];
+var sum = add.apply(null, array); // sum is 7
+
+//Make an object with a status member.
+
+var statusObject = {
+  status: 'A-OK'
+};
+
+// statusObject does not inherit from Quo.prototype,
+// but we can invoke the get_status method on
+// statusObject even though statusObject does not have
+// a get_status method.
+
+var status = Quo.prototype.get_status.apply(statusObject);
+// status is A-OK
+
+// Make a function that adds a lot of stuff.
+
+// Note that defining the variable sum inside of
+// the function does not interfere with the sum
+// defined outside of the function. The function
+// only sees the inner one.
+
+var sum = function() {
+  var i, sum = 0;
+  for (i = 0; i < arguments.length; i += 1) {
+    sum += arguments[i];
+  }
+  return sum;
+};
+
+document.write(sum(4,8,15,16,23,43)); //108
