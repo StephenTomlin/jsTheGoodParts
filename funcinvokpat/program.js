@@ -5,27 +5,27 @@
 
 var myObject = {
   value: 0,
-  increment: function (inc) {
+  increment: function(inc) {
     this.value += typeof inc === 'number' ? inc : 1;
   }
 };
 
 myObject.increment();
-document.write(myObject.value); // 1
+
 
 myObject.increment(2);
-document.write(myObject.value); // 3
+
 
 // Augment myObject with a double method.
 
-var add = function (a, b) {
+var add = function(a, b) {
   return a + b;
 };
 
-myObject.double = function () {
+myObject.double = function() {
   var that = this; // Workaround
 
-  var helper = function () {
+  var helper = function() {
     that.value = add(that.value, that.value);
   };
 
@@ -35,7 +35,7 @@ myObject.double = function () {
 // Invoke double as a mthod.
 
 myObject.double();
-document.write(myObject.value);
+
 
 var Quo = function (string) {
   this.status = string;
@@ -44,7 +44,7 @@ var Quo = function (string) {
 // Give all instances of Quo a public method
 // called get_status
 
-Quo.prototype.get_status = function () {
+Quo.prototype.get_status = function() {
   return this.status;
 };
 
@@ -52,7 +52,7 @@ Quo.prototype.get_status = function () {
 
 var myQuo = new Quo("confused");
 
-document.write(myQuo.get_status()); // confused
+
 
 //make an array of 2 numbers and add them.
 var array = [3, 4];
@@ -112,7 +112,7 @@ var try_it = function () {
 
 try_it();
 
-Function.prototype.method = function (name, func) {
+Function.prototype.method = function(name, func) {
   this.prototype[name] = func;
   return this;
 };
@@ -128,3 +128,69 @@ String.method('trim', function() {
 })
 
 document.write('"' + "  neat  ".trim() + '"');
+
+// Add a method conditionally.
+
+Function.prototype.method = function(name, func) {
+  if (this.prototype[name]) {
+    this.prototype[name] = func;
+    return this
+  }
+};
+var hanoi = function hanoi(disc, src, aux, dst) {
+  if (disc > 0) {
+    hanoi(disc - 1, src, dst, aux);
+    document.write('Move disc ' + disc +' from' + src + ' to ' + dst);
+    hanoi(disc - 1, aux, src, dst);
+  }
+};
+hanoi(3, 'Src', 'Aux', 'Dst');
+
+//Define a walk_the_dom function that visits every
+// node of the tree in HTML source order, starting
+// from some given node. It invokes a function,
+// passing it each node in turn. walk_the_DOM calls
+// itself to process each of the child nodes
+
+var walk_the_DOM = function walk(node, func) {
+  func(node);
+  node = node.firstChild;
+  while (node) {
+    walk(node, func);
+    node = node.nextSibiling;
+  }
+};
+
+// define a getElementByAttribute function. It
+// takes an attrivute name string and an optional
+// matching value. It calls walk_the_DOM, passing it a
+// function that looks for an attribute name in the
+// node. The matching nodes are accumulated in a
+// results array.
+
+var getElementByAttribute = function(att, value) {
+  var results = [];
+  walk_the_DOM(document.body, function(node) {
+    var actual = node.nodeType === 1 && node.getAttribute(att);
+    if (typeof actual === 'string' &&
+      (actual === value || typeof value !== 'string')) {
+      results.push(node)
+    }
+  });
+
+  return results;
+};
+// Make a factorial funciton with tail
+// recursion. It is tail recursive because
+// it returns the result of calling itself.
+
+// Javascript does not currently optimize this form.
+
+var factorial = function factorial(i, a) {
+  a = a || 1
+  if (i < 2) {
+    return a;
+  }
+  return factorial(i - 1, a * i);
+};
+document.write(factorial(4)); // 24
